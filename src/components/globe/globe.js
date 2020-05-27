@@ -11,8 +11,8 @@
  * http://www.apache.org/licenses/LICENSE-2.0
  */
 
-var THREE = require("../globe/third-party/three.min.js");
-var img = require("../assets/world.jpg");
+var THREE = require("./third-party/three.min.js");
+var img = require("../../assets/world.jpg");
 
 function Globe(container, opts) {
   opts = opts || {};
