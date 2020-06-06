@@ -1,11 +1,35 @@
-.container {
-  height: 100%;
-  width: 100%;
-  position: absolute;
-  background-color: black;
+.main {
+  .container {
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    background-color: black;
+  }
 }
 
-.menu {
+.box {
   position: absolute;
   z-index: 99;
+  bottom: -3%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 670px;
+  height: 60px;
+  background-color: white;
+  opacity: 70%;
+  border-radius: 7px;
+  padding-top: 40px;
+  padding-bottom: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  
+  .menu {
+    width: 550px;
+  }
+
+  .dates {
+    color: black;
+    padding: 15px;
+  }
 }

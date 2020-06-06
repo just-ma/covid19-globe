@@ -51,3 +51,19 @@ export const parseData = (d) => {
   }
   return timeline;
 };
+
+export const formatDate = (numDate) => {
+  const date = new Date(numDate)
+  const dateTimeFormat = new Intl.DateTimeFormat('en', {month: 'short', day: '2-digit', year: 'numeric'}) 
+  const [{ value: month },,{ value: day },,{ value: year }] = dateTimeFormat.formatToParts(date) 
+  
+  return (`${month}. ${day}, ${year}`);
+};
+
+export const extractMonth = (numDate) => {
+  const date = new Date(numDate)
+  const dateTimeFormat = new Intl.DateTimeFormat('en', {month: 'short', day: '2-digit', year: 'numeric'}) 
+  const [{ value: month }] = dateTimeFormat.formatToParts(date) 
+  
+  return month;
+};
