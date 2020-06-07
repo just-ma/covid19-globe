@@ -2,8 +2,10 @@ import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { createGlobe, updateGlobe, parseData, getMarks } from "./utils";
 import Slidebar from "./components/slidebar/Slidebar";
-import ToggleButton from "@material-ui/lab/ToggleButton";
-import ToggleButtonGroup from "@material-ui/lab/ToggleButtonGroup";
+import Tooltip from "@material-ui/core/Tooltip";
+import IconButton from "@material-ui/core/IconButton";
+import MoreVertIcon from "@material-ui/icons/MoreVert";
+import Settings from "./components/settings/Settings";
 import "./app.scss";
 
 const INITIAL_TIME = 1;
@@ -25,6 +27,7 @@ export default function App() {
   const [globe, setGlobe] = useState(null);
   const [marks, setMarks] = useState([]);
   const [scale, setScale] = useState("log");
+  const [settingsOpen, setSettingsOpen] = useState(false);
 
   let time = 1;
 
@@ -63,10 +66,15 @@ export default function App() {
 
   const toggleLinLog = (event, value) => {
     if (value !== null) {
-      console.log("val", value);
       setScale(value);
       let translatedTime = translateTime(time, value);
       updateGlobe(globe, translatedTime, false);
+    }
+  };
+
+  const onTooltipClick = () => {
+    if (!settingsOpen) {
+      setSettingsOpen(true);
     }
   };
 
@@ -77,15 +85,23 @@ export default function App() {
         <Slidebar updateTime={updateTime} data={data} marks={marks} />
       </Box>
       <div className="main__corner">
-        <ToggleButtonGroup
-          value={scale}
-          exclusive
-          onChange={toggleLinLog}
-          orientation="vertical"
+        <Tooltip
+          title={
+            <Settings
+              scale={scale}
+              toggleLinLog={toggleLinLog}
+              setOpen={setSettingsOpen}
+            />
+          }
+          interactive
+          placement="right-start"
+          open={settingsOpen}
+          onClick={onTooltipClick}
         >
-          <ToggleButton value="log">LOG</ToggleButton>
-          <ToggleButton value="linear">LINEAR</ToggleButton>
-        </ToggleButtonGroup>
+          <IconButton>
+            <MoreVertIcon className="main__corner__button" />
+          </IconButton>
+        </Tooltip>
       </div>
     </div>
   );

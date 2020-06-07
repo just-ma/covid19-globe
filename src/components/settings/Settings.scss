@@ -1,0 +1,32 @@
+.settings {
+  margin-left: 10px;
+  background: #202020;
+  opacity: 0.9;
+  padding: 10px;
+  border-radius: 7px;
+
+  &__row {
+    display: flex;
+    align-items: center;
+    margin: 5px 10px;
+
+    .MuiToggleButton-label {
+      font-family: "Inconsolata", monospace;
+      color: white;
+      width: 50px;
+    }
+
+    .Mui-selected {
+      color: white !important;
+      background: #535353 !important;
+      font-weight: bold;
+    }
+  }
+
+  &__label {
+    font-family: "Inconsolata", monospace;
+    color: white;
+    width: 100px;
+    font-size: 14px;
+  }
+}
