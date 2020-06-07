@@ -36,6 +36,15 @@ export const parseData = (d) => {
   let len = header.length;
   let timeline = [];
 
+  let max = 0;
+  arr.forEach((row) => {
+    let rowArr = row.split(",");
+    for (let i = 4; i < rowArr.length; i++) {
+      max = Math.max(parseInt(rowArr[i]), max);
+    }
+  });
+
+  let maxLog = Math.log(max / 5000);
   for (let i = 4; i < len; i++) {
     let day = [];
     arr.forEach((row) => {
@@ -43,8 +52,8 @@ export const parseData = (d) => {
       day.push(
         rowArr[2],
         rowArr[3],
-        Math.log(rowArr[i] / 1000) / 10
-        //rowArr[i] / 1000000
+        Math.log(rowArr[i] / 5000) / maxLog
+        //1.5 * rowArr[i] / max
       );
     });
     timeline.push([header[i], [...day]]);
@@ -53,17 +62,29 @@ export const parseData = (d) => {
 };
 
 export const formatDate = (numDate) => {
-  const date = new Date(numDate)
-  const dateTimeFormat = new Intl.DateTimeFormat('en', {month: 'short', day: '2-digit', year: 'numeric'}) 
-  const [{ value: month },,{ value: day },,{ value: year }] = dateTimeFormat.formatToParts(date) 
-  
-  return (`${month}. ${day}, ${year}`);
+  const date = new Date(numDate);
+  const dateTimeFormat = new Intl.DateTimeFormat("en", {
+    month: "short",
+    day: "2-digit",
+    year: "numeric",
+  });
+  const [
+    { value: month },
+    ,
+    { value: day },
+    ,
+    { value: year },
+  ] = dateTimeFormat.formatToParts(date);
+
+  return `${month.toUpperCase()} ${day}, ${year}`;
 };
 
 export const extractMonth = (numDate) => {
-  const date = new Date(numDate)
-  const dateTimeFormat = new Intl.DateTimeFormat('en', {month: 'short', day: '2-digit', year: 'numeric'}) 
-  const [{ value: month }] = dateTimeFormat.formatToParts(date) 
-  
-  return month;
+  const date = new Date(numDate);
+  const dateTimeFormat = new Intl.DateTimeFormat("en", {
+    month: "short",
+  });
+  const [{ value: month }] = dateTimeFormat.formatToParts(date);
+
+  return month.toUpperCase();
 };

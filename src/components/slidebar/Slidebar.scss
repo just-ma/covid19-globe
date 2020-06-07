@@ -1,6 +1,12 @@
 .slidebar {
   .slider {
-    color: black;
+    color: white;
+    margin-bottom: 40px;
+
+    .MuiSlider-markLabel {
+      font-family: "Inconsolata", monospace;
+      font-size: 14px;
+      color: white;
+    }
   }
 }
-
