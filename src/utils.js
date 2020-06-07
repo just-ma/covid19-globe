@@ -66,6 +66,7 @@ export const parseData = (d) => {
 };
 
 export const formatDate = (numDate) => {
+  numDate = numDate.substring(0, numDate.length - 1);
   const date = new Date(numDate);
   const dateTimeFormat = new Intl.DateTimeFormat("en", {
     month: "short",

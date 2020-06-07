@@ -1,14 +1,35 @@
 .main {
-  .container {
+  &__container {
     height: 100%;
     width: 100%;
     position: absolute;
     background-color: black;
   }
+
+  &__corner {
+    position: fixed;
+    top: 5%;
+    left: 3%;
+    border-radius: 7px;
+    overflow: hidden;
+    background-color: black;
+    opacity: 0.8;
+
+    .MuiToggleButton-label {
+      font-family: "Inconsolata", monospace;
+      color: white;
+    }
+
+    .Mui-selected {
+      color: white !important;
+      background: #424242 !important;
+      font-weight: bold;
+    }
+  }
 }
 
 .box {
-  position: absolute;
+  position: fixed;
   z-index: 99;
   bottom: -3%;
   left: 50%;

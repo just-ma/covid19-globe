@@ -79,7 +79,7 @@ function Globe(container, opts) {
   var zoomSpeed = 50;
 
   var mouseDown = false;
-  var mouseDownTime = 0;
+  var mouseDownTime = Date.now();
   var mouseDeltaTime = Date.now();
 
   var mouse = { x: 0, y: 0 },
@@ -150,15 +150,12 @@ function Globe(container, opts) {
     renderer.domElement.style.position = "absolute";
 
     container.appendChild(renderer.domElement);
-
     container.addEventListener("mousedown", onMouseDown, false);
-
     container.addEventListener("mousewheel", onMouseWheel, false);
-
     document.addEventListener("keydown", onDocumentKeyDown, false);
-
     window.addEventListener("resize", onWindowResize, false);
-
+    window.addEventListener("focus", onWindowFocus, false);
+    window.addEventListener("blur", onWindowBlur, false);
     container.addEventListener(
       "mouseover",
       function () {
@@ -166,7 +163,6 @@ function Globe(container, opts) {
       },
       false
     );
-
     container.addEventListener(
       "mouseout",
       function () {
@@ -174,6 +170,16 @@ function Globe(container, opts) {
       },
       false
     );
+  }
+
+  function onWindowFocus() {
+    mouseDown = false;
+    mouseDeltaTime += Date.now() - mouseDownTime;
+  }
+
+  function onWindowBlur() {
+    mouseDown = true;
+    mouseDownTime = Date.now();
   }
 
   function addData(data, opts) {
