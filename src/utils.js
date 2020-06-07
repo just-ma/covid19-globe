@@ -23,18 +23,23 @@ export const createGlobe = (data, container, startTime) => {
   return globe;
 };
 
-export const updateGlobe = (globe, time) => {
-  new TWEEN.Tween(globe)
-    .to({ time: time }, 500)
-    .easing(TWEEN.Easing.Cubic.EaseOut)
-    .start();
+export const updateGlobe = (globe, time, ease) => {
+  if (ease) {
+    new TWEEN.Tween(globe)
+      .to({ time: time }, 500)
+      .easing(TWEEN.Easing.Cubic.EaseOut)
+      .start();
+  } else {
+    new TWEEN.Tween(globe).to({ time: time }, 0).start();
+  }
 };
 
 export const parseData = (d) => {
   let arr = d.split("\n");
   let header = arr.shift().split(",");
   let len = header.length;
-  let timeline = [];
+  let timelineLin = [];
+  let timelineLog = [];
 
   let max = 0;
   arr.forEach((row) => {
@@ -43,22 +48,21 @@ export const parseData = (d) => {
       max = Math.max(parseInt(rowArr[i]), max);
     }
   });
-
   let maxLog = Math.log(max / 5000);
+
   for (let i = 4; i < len; i++) {
-    let day = [];
+    let dayLin = [];
+    let dayLog = [];
     arr.forEach((row) => {
       let rowArr = row.split(",");
-      day.push(
-        rowArr[2],
-        rowArr[3],
-        Math.log(rowArr[i] / 5000) / maxLog
-        //1.5 * rowArr[i] / max
-      );
+      dayLin.push(rowArr[2], rowArr[3], (1.5 * rowArr[i]) / max);
+      dayLog.push(rowArr[2], rowArr[3], Math.log(rowArr[i] / 5000) / maxLog);
     });
-    timeline.push([header[i], [...day]]);
+    timelineLin.push([header[i] + "1", [...dayLin]]);
+    timelineLog.push([header[i] + "2", [...dayLog]]);
   }
-  return timeline;
+
+  return [timelineLin, timelineLog];
 };
 
 export const formatDate = (numDate) => {
@@ -87,4 +91,22 @@ export const extractMonth = (numDate) => {
   const [{ value: month }] = dateTimeFormat.formatToParts(date);
 
   return month.toUpperCase();
+};
+
+export const getMarks = (data) => {
+  let lastMonth = "1";
+  let marks = [];
+
+  for (let i = 0; i < data.length; ++i) {
+    let currMonth = data[i][0].split("/")[0];
+    if (currMonth !== lastMonth) {
+      lastMonth = currMonth;
+      marks.push({
+        value: i,
+        label: extractMonth(currMonth),
+      });
+    }
+  }
+
+  return marks;
 };
