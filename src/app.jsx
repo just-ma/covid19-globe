@@ -4,7 +4,7 @@ import { createGlobe, updateGlobe, parseData, getMarks } from "./utils";
 import Slidebar from "./components/slidebar/Slidebar";
 import Tooltip from "@material-ui/core/Tooltip";
 import IconButton from "@material-ui/core/IconButton";
-import MoreVertIcon from "@material-ui/icons/MoreVert";
+import SettingsIcon from "@material-ui/icons/Settings";
 import Settings from "./components/settings/Settings";
 import "./app.scss";
 
@@ -79,10 +79,12 @@ export default function App() {
     }
   };
 
-  const toggleRot = (evemt, rot) => {
-    setIsRotating(rot);
-    globe.setRot(rot);
-  }
+  const toggleRot = (evemt, value) => {
+    if (value !== null) {
+      setIsRotating(value);
+      globe.setRot(value);
+    }
+  };
 
   return (
     <div className="main">
@@ -107,7 +109,7 @@ export default function App() {
           onClick={onTooltipClick}
         >
           <IconButton>
-            <MoreVertIcon className="main__corner__button" />
+            <SettingsIcon className="main__corner__button" />
           </IconButton>
         </Tooltip>
       </div>

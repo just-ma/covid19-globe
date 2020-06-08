@@ -4,7 +4,36 @@ import ToggleButton from "@material-ui/lab/ToggleButton";
 import ToggleButtonGroup from "@material-ui/lab/ToggleButtonGroup";
 import "./Settings.scss";
 
-export default function Settings({ toggleLinLog, scale, setOpen, toggleRot, isRotating }) {
+const scaleButtons = [
+  { value: "log", name: "LOG" },
+  { value: "linear", name: "LINEAR" },
+];
+
+const rotButtons = [
+  { value: true, name: "ON" },
+  { value: false, name: "OFF" },
+];
+
+const SettingsRow = ({ label, value, toggleButtons, onChange }) => {
+  return (
+    <div className="settings__row">
+      <span className="settings__label">{label}</span>
+      <ToggleButtonGroup value={value} exclusive onChange={onChange}>
+        {toggleButtons.map((i) => (
+          <ToggleButton value={i.value}>{i.name}</ToggleButton>
+        ))}
+      </ToggleButtonGroup>
+    </div>
+  );
+};
+
+export default function Settings({
+  toggleLinLog,
+  scale,
+  setOpen,
+  toggleRot,
+  isRotating,
+}) {
   const onClickAway = () => {
     setOpen(false);
   };
@@ -12,20 +41,18 @@ export default function Settings({ toggleLinLog, scale, setOpen, toggleRot, isRo
   return (
     <ClickAwayListener onClickAway={onClickAway}>
       <div className="settings">
-        <div className="settings__row">
-          <span className="settings__label">SCALE:</span>
-          <ToggleButtonGroup value={scale} exclusive onChange={toggleLinLog}>
-            <ToggleButton value="log">LOG</ToggleButton>
-            <ToggleButton value="linear">LINEAR</ToggleButton>
-          </ToggleButtonGroup>
-        </div>
-        <div className="settings__row">
-          <span className="settings__label">AUTO-ROTATE:</span>
-          <ToggleButtonGroup value={isRotating} exclusive onChange={toggleRot}>
-            <ToggleButton value={true}>ON</ToggleButton>
-            <ToggleButton value={false}>OFF</ToggleButton>
-          </ToggleButtonGroup>
-        </div>
+        <SettingsRow
+          label="SCALE:"
+          value={scale}
+          toggleButtons={scaleButtons}
+          onChange={toggleLinLog}
+        />
+        <SettingsRow
+          label="AUTO-ROTATE:"
+          value={isRotating}
+          toggleButtons={rotButtons}
+          onChange={toggleRot}
+        />
       </div>
     </ClickAwayListener>
   );
