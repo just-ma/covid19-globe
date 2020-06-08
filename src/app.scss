@@ -6,6 +6,15 @@
     background-color: black;
   }
 
+  &__bottom {
+    position: fixed;
+    z-index: 99;
+    bottom: 5%;
+    left: 50%;
+    transform: translate(-50%, 0);
+    width: 80%;
+  }
+
   &__corner {
     position: fixed;
     top: 5%;
@@ -15,42 +24,16 @@
     background-color: black;
     opacity: 0.8;
 
-    &__button {
+    &__icon {
       color: white;
       opacity: 0.8;
       padding: 5px;
       transition: 0.2s ease !important;
+      flex: 1;
 
       &:hover {
         opacity: 1;
       }
     }
-  }
-}
-
-.box {
-  position: fixed;
-  z-index: 99;
-  bottom: -3%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 80%;
-  height: 30px;
-  background-color: black;
-  opacity: 0.8;
-  border-radius: 7px;
-  padding-top: 40px;
-  padding-bottom: 10px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  .menu {
-    width: 550px;
-  }
-
-  .dates {
-    color: black;
-    padding: 15px;
   }
 }

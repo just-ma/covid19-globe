@@ -1,0 +1,23 @@
+.control {
+  height: 40px;
+  padding: 20px;
+  background-color: black;
+  opacity: 0.8;
+  border-radius: 7px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  &__icon {
+    color: white;
+    opacity: 0.8;
+    padding: 5px;
+    transition: 0.2s ease !important;
+    flex: 1;
+    margin-bottom: 10px;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+}

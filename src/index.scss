@@ -16,8 +16,10 @@ code {
   font-family: "Inconsolata", monospace !important;
 }
 
-.MuiTooltip-tooltip {
-  margin: 0 !important;
-  padding: 0 !important;
-  background-color: transparent !important;
+.MuiTooltip-popperInteractive {
+  .MuiTooltip-tooltipPlacementTop {
+    margin: 0 !important;
+    padding: 0 !important;
+    background-color: transparent !important;
+  }
 }

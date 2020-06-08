@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Slider from "@material-ui/core/Slider";
-import "./Slidebar.scss";
 import { withStyles } from "@material-ui/core/styles";
 import Tooltip from "@material-ui/core/Tooltip";
 import PropTypes from "prop-types";
-import { formatDate } from "../../utils";
+import { formatDate, getMarks } from "../../utils";
+import "./Slidebar.scss";
 
 const HtmlTooltip = withStyles(() => ({
   tooltip: {
@@ -14,8 +14,7 @@ const HtmlTooltip = withStyles(() => ({
   },
 }))(Tooltip);
 
-function ValueLabelComponent(props) {
-  const { children, open, value } = props;
+const ValueLabelComponent = ({ children, open, value }) => {
   return (
     <HtmlTooltip
       className="tooltip"
@@ -27,10 +26,18 @@ function ValueLabelComponent(props) {
       {children}
     </HtmlTooltip>
   );
-}
+};
 
-export default function Slidebar({ updateTime, data, marks }) {
+export default function Slidebar({ updateTime, data }) {
   const [value, setValue] = useState(Number.MAX_VALUE);
+  const [marks, setMarks] = useState([]);
+
+  useEffect(() => {
+    if (data) {
+      let m = getMarks(data);
+      setMarks(m);
+    }
+  }, [data]);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);

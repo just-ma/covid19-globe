@@ -1,6 +1,6 @@
 .settings {
-  margin-left: 10px;
-  background: #202020;
+  margin: 10px 20px;
+  background: #1d1d1d;
   opacity: 0.9;
   padding: 10px;
   border-radius: 7px;
@@ -8,7 +8,17 @@
   &__row {
     display: flex;
     align-items: center;
-    margin: 5px 10px;
+    margin: 10px;
+
+    .MuiToggleButton-root {
+      background: #0e0e0e;
+      opacity: 0.8;
+
+      &:hover {
+        background: #141414;
+        opacity: 1;
+      }
+    }
 
     .MuiToggleButton-label {
       font-family: "Inconsolata", monospace;
@@ -28,5 +38,6 @@
     color: white;
     width: 100px;
     font-size: 14px;
+    cursor: default;
   }
 }
