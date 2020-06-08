@@ -82,6 +82,8 @@ function Globe(container, opts) {
   var mouseDownTime = Date.now();
   var mouseDeltaTime = Date.now();
 
+  var isRotating = true;
+
   var mouse = { x: 0, y: 0 },
     mouseOnDown = { x: 0, y: 0 };
   var rotation = { x: 0, y: 0 },
@@ -92,6 +94,18 @@ function Globe(container, opts) {
     distanceTarget = 100000;
   var padding = 40;
   var PI_HALF = Math.PI / 2;
+
+  function setRot(rot) {
+    if (rot !== isRotating) {
+      if (rot) {
+        mouseDeltaTime += Date.now() - mouseDownTime;
+      } else {
+        mouseDownTime = Date.now();
+      }
+      mouseDown = !rot;
+      isRotating = rot;
+    }
+  }
 
   function init() {
     container.style.color = "#fff";
@@ -173,13 +187,17 @@ function Globe(container, opts) {
   }
 
   function onWindowFocus() {
-    mouseDown = false;
-    mouseDeltaTime += Date.now() - mouseDownTime;
+    if (isRotating) {
+      mouseDown = false;
+      mouseDeltaTime += Date.now() - mouseDownTime;
+    }
   }
 
   function onWindowBlur() {
-    mouseDown = true;
-    mouseDownTime = Date.now();
+    if (isRotating) {
+      mouseDown = true;
+      mouseDownTime = Date.now();
+    }
   }
 
   function addData(data, opts) {
@@ -301,8 +319,11 @@ function Globe(container, opts) {
   function onMouseDown(event) {
     event.preventDefault();
 
-    mouseDown = true;
-    mouseDownTime = Date.now();
+    if (isRotating) {
+      mouseDown = true;
+      mouseDownTime = Date.now();
+    }
+
     container.addEventListener("mousemove", onMouseMove, false);
     container.addEventListener("mouseup", onMouseUp, false);
     container.addEventListener("mouseout", onMouseOut, false);
@@ -330,8 +351,11 @@ function Globe(container, opts) {
   }
 
   function onMouseUp(event) {
-    mouseDown = false;
-    mouseDeltaTime += Date.now() - mouseDownTime;
+    if (isRotating) {
+      mouseDown = false;
+      mouseDeltaTime += Date.now() - mouseDownTime;
+    }
+
     container.removeEventListener("mousemove", onMouseMove, false);
     container.removeEventListener("mouseup", onMouseUp, false);
     container.removeEventListener("mouseout", onMouseOut, false);
@@ -339,8 +363,11 @@ function Globe(container, opts) {
   }
 
   function onMouseOut(event) {
-    mouseDown = false;
-    mouseDeltaTime += Date.now() - mouseDownTime;
+    if (isRotating) {
+      mouseDown = false;
+      mouseDeltaTime += Date.now() - mouseDownTime;
+    }
+
     container.removeEventListener("mousemove", onMouseMove, false);
     container.removeEventListener("mouseup", onMouseUp, false);
     container.removeEventListener("mouseout", onMouseOut, false);
@@ -435,6 +462,7 @@ function Globe(container, opts) {
     this._time = t;
   });
 
+  this.setRot = setRot;
   this.addData = addData;
   this.createPoints = createPoints;
   this.renderer = renderer;

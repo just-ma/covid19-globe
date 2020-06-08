@@ -15,3 +15,11 @@ code {
 .MuiTooltip-tooltipPlacementTop {
   font-family: "Inconsolata", monospace !important;
 }
+
+.MuiTooltip-popperInteractive {
+  .MuiTooltip-tooltipPlacementTop {
+    margin: 0 !important;
+    padding: 0 !important;
+    background-color: transparent !important;
+  }
+}
