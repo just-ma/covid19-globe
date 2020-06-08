@@ -28,6 +28,7 @@ export default function App() {
   const [marks, setMarks] = useState([]);
   const [scale, setScale] = useState("log");
   const [settingsOpen, setSettingsOpen] = useState(false);
+  const [isRotating, setIsRotating] = useState(true);
 
   let time = 1;
 
@@ -78,6 +79,11 @@ export default function App() {
     }
   };
 
+  const toggleRot = (evemt, rot) => {
+    setIsRotating(rot);
+    globe.setRot(rot);
+  }
+
   return (
     <div className="main">
       <div ref={containerEl} className="main__container" />
@@ -91,6 +97,8 @@ export default function App() {
               scale={scale}
               toggleLinLog={toggleLinLog}
               setOpen={setSettingsOpen}
+              toggleRot={toggleRot}
+              isRotating={isRotating}
             />
           }
           interactive

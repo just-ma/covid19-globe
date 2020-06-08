@@ -4,7 +4,7 @@ import ToggleButton from "@material-ui/lab/ToggleButton";
 import ToggleButtonGroup from "@material-ui/lab/ToggleButtonGroup";
 import "./Settings.scss";
 
-export default function Settings({ toggleLinLog, scale, setOpen }) {
+export default function Settings({ toggleLinLog, scale, setOpen, toggleRot, isRotating }) {
   const onClickAway = () => {
     setOpen(false);
   };
@@ -17,6 +17,13 @@ export default function Settings({ toggleLinLog, scale, setOpen }) {
           <ToggleButtonGroup value={scale} exclusive onChange={toggleLinLog}>
             <ToggleButton value="log">LOG</ToggleButton>
             <ToggleButton value="linear">LINEAR</ToggleButton>
+          </ToggleButtonGroup>
+        </div>
+        <div className="settings__row">
+          <span className="settings__label">AUTO-ROTATE:</span>
+          <ToggleButtonGroup value={isRotating} exclusive onChange={toggleRot}>
+            <ToggleButton value={true}>ON</ToggleButton>
+            <ToggleButton value={false}>OFF</ToggleButton>
           </ToggleButtonGroup>
         </div>
       </div>
