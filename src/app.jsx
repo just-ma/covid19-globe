@@ -5,6 +5,7 @@ import IconButton from "@material-ui/core/IconButton";
 import ControlBar from "./components/controlBar/ControlBar";
 import InfoIcon from "@material-ui/icons/Info";
 import Info from "./components/info/Info";
+import Loading from "./components/loading/Loading";
 import { createGlobe, updateGlobe, parseData } from "./utils";
 import "./app.scss";
 
@@ -34,7 +35,7 @@ export default function App() {
     }
   }, [fullData, containerEl]);
 
-  return (
+  return (!data ? <Loading /> :
     <div className="main">
       <div ref={containerEl} className="main__container" />
       <div className="main__bottom">
