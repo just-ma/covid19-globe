@@ -63,7 +63,7 @@ function Globe(container, opts) {
       fragmentShader: [
         "varying vec3 vNormal;",
         "void main() {",
-        "float intensity = pow( 0.8 - dot( vNormal, vec3( 0, 0, 1.0 ) ), 12.0 );",
+        "float intensity = pow( 0.77 - dot( vNormal, vec3( 0, 0, 1.0 ) ), 12.0 );",
         "gl_FragColor = vec4( 1.0, 1.0, 1.0, 1.0 ) * intensity;",
         "}",
       ].join("\n"),
@@ -90,8 +90,10 @@ function Globe(container, opts) {
     target = { x: (Math.PI * 3) / 2, y: Math.PI / 6.0 },
     targetOnDown = { x: 0, y: 0 };
 
-  var distance = 100000,
-    distanceTarget = 100000;
+  var distance = 1100,
+    distanceTarget = 1100;
+  var distMax = 1500;
+  var distMin = 350;
   var padding = 40;
   var PI_HALF = Math.PI / 2;
 
@@ -164,6 +166,7 @@ function Globe(container, opts) {
     renderer.domElement.style.position = "absolute";
 
     container.appendChild(renderer.domElement);
+    container.addEventListener("touchstart", onTouchStart, false);
     container.addEventListener("mousedown", onMouseDown, false);
     container.addEventListener("mousewheel", onMouseWheel, false);
     document.addEventListener("keydown", onDocumentKeyDown, false);
@@ -184,7 +187,14 @@ function Globe(container, opts) {
       },
       false
     );
-  }
+    container.addEventListener(
+      "touchcancel",
+      function () {
+        overRenderer = false;
+      },
+      false
+    );
+}
 
   function onWindowFocus() {
     if (isRotating) {
@@ -337,7 +347,43 @@ function Globe(container, opts) {
     container.style.cursor = "move";
   }
 
+  function onTouchStart(event) {
+    event.preventDefault();
+
+    if (isRotating) {
+      mouseDown = true;
+      mouseDownTime = Date.now();
+    }
+
+    event = event.touches[0];
+
+    container.addEventListener("touchmove", onTouchMove, false);
+    container.addEventListener("touchend", onTouchEnd, false);
+    container.addEventListener("touchcancel", onTouchCancel, false);
+
+    mouseOnDown.x = -event.clientX;
+    mouseOnDown.y = event.clientY;
+
+    targetOnDown.x = target.x;
+    targetOnDown.y = target.y;
+  }
+
   function onMouseMove(event) {
+    mouse.x = -event.clientX;
+    mouse.y = event.clientY;
+
+    var zoomDamp = distance / 1000;
+
+    target.x = targetOnDown.x + (mouse.x - mouseOnDown.x) * 0.005 * zoomDamp;
+    target.y = targetOnDown.y + (mouse.y - mouseOnDown.y) * 0.005 * zoomDamp;
+
+    target.y = target.y > PI_HALF ? PI_HALF : target.y;
+    target.y = target.y < -PI_HALF ? -PI_HALF : target.y;
+  }
+
+  function onTouchMove(event) {
+    event = event.touches[0];
+
     mouse.x = -event.clientX;
     mouse.y = event.clientY;
 
@@ -362,6 +408,17 @@ function Globe(container, opts) {
     container.style.cursor = "auto";
   }
 
+  function onTouchEnd(event) {
+    if (isRotating) {
+      mouseDown = false;
+      mouseDeltaTime += Date.now() - mouseDownTime;
+    }
+
+    container.removeEventListener("touchmove", onTouchMove, false);
+    container.removeEventListener("touchend", onTouchEnd, false);
+    container.removeEventListener("touchcancel", onTouchCancel, false);
+  }
+
   function onMouseOut(event) {
     if (isRotating) {
       mouseDown = false;
@@ -371,6 +428,17 @@ function Globe(container, opts) {
     container.removeEventListener("mousemove", onMouseMove, false);
     container.removeEventListener("mouseup", onMouseUp, false);
     container.removeEventListener("mouseout", onMouseOut, false);
+  }
+
+  function onTouchCancel(event) {
+    if (isRotating) {
+      mouseDown = false;
+      mouseDeltaTime += Date.now() - mouseDownTime;
+    }
+
+    container.removeEventListener("touchmove", onTouchMove, false);
+    container.removeEventListener("touchend", onTouchEnd, false);
+    container.removeEventListener("touchcancel", onTouchCancel, false);
   }
 
   function onMouseWheel(event) {
@@ -402,8 +470,8 @@ function Globe(container, opts) {
 
   function zoom(delta) {
     distanceTarget -= delta;
-    distanceTarget = distanceTarget > 1000 ? 1000 : distanceTarget;
-    distanceTarget = distanceTarget < 350 ? 350 : distanceTarget;
+    distanceTarget = distanceTarget > distMax ? distMax : distanceTarget;
+    distanceTarget = distanceTarget < distMin ? distMin : distanceTarget;
   }
 
   function animate() {
@@ -420,7 +488,7 @@ function Globe(container, opts) {
 
     rotation.x += (target.x - rotation.x + timer) * 0.1;
     rotation.y += (target.y - rotation.y) * 0.1;
-    distance += (distanceTarget - distance) * 0.3;
+    distance += (distanceTarget - distance) * 0.1;
 
     camera.position.x = distance * Math.sin(rotation.x) * Math.cos(rotation.y);
     camera.position.y = distance * Math.sin(rotation.y);

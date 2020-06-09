@@ -1,3 +1,5 @@
+@import "../../styles.scss";
+
 .info {
   margin: 10px;
   padding: 10px 20px;
@@ -7,6 +9,7 @@
   background: #1d1d1d;
   opacity: 0.9;
   border-radius: 7px;
+  width: 270px;
 
   &__icon {
     opacity: 0.9;
@@ -33,8 +36,15 @@
   }
 }
 
-.MuiTooltip-tooltipPlacementRight {
+.MuiTooltip-tooltipPlacementRight,
+.MuiTooltip-tooltipPlacementLeft {
   margin: 0 !important;
   padding: 0 !important;
   background-color: transparent !important;
+}
+
+@media screen and (max-width: $max-width) {
+  .info {
+    width: 80%;
+  }
 }

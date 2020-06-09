@@ -48,7 +48,7 @@ export default function ControlBar({ data, globe }) {
 
   return (
     <div className="control">
-      <IconButton>
+      <IconButton className="control__button">
         <PlayArrowIcon className="control__icon" />
       </IconButton>
       <Slidebar updateTime={updateTime} data={data} />
@@ -66,7 +66,7 @@ export default function ControlBar({ data, globe }) {
         open={settingsOpen}
         onClick={onTooltipClick}
       >
-        <IconButton>
+        <IconButton className="control__button">
           <MoreVertIcon className="control__icon" />
         </IconButton>
       </Tooltip>
