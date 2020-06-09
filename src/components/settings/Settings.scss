@@ -1,3 +1,5 @@
+@import "../../styles.scss";
+
 .settings {
   margin: 10px 20px;
   background: #1d1d1d;
@@ -39,5 +41,11 @@
     width: 100px;
     font-size: 14px;
     cursor: default;
+  }
+}
+
+@media screen and (max-width: $max-width) {
+  .settings {
+    margin: 30px 20px;
   }
 }

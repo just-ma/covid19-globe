@@ -1,3 +1,5 @@
+@import "../../styles.scss";
+
 .slidebar {
   flex: 5;
   margin: 0 20px;
@@ -11,5 +13,13 @@
       font-size: 14px;
       color: white;
     }
+  }
+}
+
+@media screen and (max-width: $max-width) {
+  .slidebar {
+    width: 100%;
+    flex-basis: 100%;
+    order: 2;
   }
 }

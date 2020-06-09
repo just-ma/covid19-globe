@@ -1,0 +1,50 @@
+@import "../../styles.scss";
+
+.info {
+  margin: 10px;
+  padding: 10px 20px;
+  font-family: "Inconsolata", monospace;
+  font-size: 14px;
+  color: white;
+  background: #1d1d1d;
+  opacity: 0.9;
+  border-radius: 7px;
+  width: 270px;
+
+  &__icon {
+    opacity: 0.9;
+    width: 15px !important;
+    height: 15px !important;
+    margin-bottom: -3px;
+    margin-right: 10px;
+    cursor: pointer;
+    transition: 0.2s ease !important;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+}
+
+.infoLink {
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.MuiTooltip-tooltipPlacementRight,
+.MuiTooltip-tooltipPlacementLeft {
+  margin: 0 !important;
+  padding: 0 !important;
+  background-color: transparent !important;
+}
+
+@media screen and (max-width: $max-width) {
+  .info {
+    width: 80%;
+  }
+}

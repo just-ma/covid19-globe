@@ -84,7 +84,7 @@ export default function ControlBar({ data, globe }) {
 
   return (
     <div className="control">
-      <IconButton onClick={togglePlayPause}>
+      <IconButton className="control__button" onClick={togglePlayPause}>
         {!isAnimating ? <PlayArrowIcon className="control__icon" /> : <PauseIcon className="control__icon" />}
       </IconButton>
       <Slidebar updateTime={updateTime} data={data} time={time} />
@@ -102,7 +102,7 @@ export default function ControlBar({ data, globe }) {
         open={settingsOpen}
         onClick={onTooltipClick}
       >
-        <IconButton>
+        <IconButton className="control__button">
           <MoreVertIcon className="control__icon" />
         </IconButton>
       </Tooltip>
