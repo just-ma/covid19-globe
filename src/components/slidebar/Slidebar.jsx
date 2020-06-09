@@ -28,8 +28,7 @@ const ValueLabelComponent = ({ children, open, value }) => {
   );
 };
 
-export default function Slidebar({ updateTime, data }) {
-  const [value, setValue] = useState(Number.MAX_VALUE);
+export default function Slidebar({ updateTime, data, time }) {
   const [marks, setMarks] = useState([]);
 
   useEffect(() => {
@@ -40,12 +39,11 @@ export default function Slidebar({ updateTime, data }) {
   }, [data]);
 
   const handleChange = (event, newValue) => {
-    setValue(newValue);
-    updateTime(newValue / (data.length - 1));
+    updateTime(newValue);
   };
 
-  const valueLabelFormat = (value) => {
-    if (data) return formatDate(data[value][0]);
+  const valueLabelFormat = (time) => {
+    if (data) return formatDate(data[time][0]);
   };
 
   ValueLabelComponent.propTypes = {
@@ -58,7 +56,7 @@ export default function Slidebar({ updateTime, data }) {
     <div className="slidebar">
       <Slider
         className="slider"
-        value={value}
+        value={time}
         min={0}
         max={data && data.length - 1}
         step={1}
