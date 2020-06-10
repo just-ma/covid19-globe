@@ -365,11 +365,27 @@ function Globe(container, opts) {
     target.y = target.y < -PI_HALF ? -PI_HALF : target.y;
   }
 
-  function onTouchMove(event) {
-    event = event.touches[0];
+  let isZooming = false;
+  let lastDist = 0;
 
-    mouse.x = -event.clientX;
-    mouse.y = event.clientY;
+  function getDist(x1, y1, x2, y2) {
+    var xDist = Math.pow(x1 - x2, 2);
+    var yDist = Math.pow(y1 - y2, 2);
+    return Math.sqrt(xDist + yDist);
+  }
+
+  function zoomMobile(delta) {
+    console.log(delta);
+    distanceTarget -= delta;
+    distanceTarget = distanceTarget > distMax ? distMax : distanceTarget;
+    distanceTarget = distanceTarget < distMin ? distMin : distanceTarget;
+  }
+
+  function onTouchMove(event) {
+    let event1 = event.touches[0];
+
+    mouse.x = -event1.clientX;
+    mouse.y = event1.clientY;
 
     var zoomDamp = distance / 1000;
 
@@ -378,6 +394,24 @@ function Globe(container, opts) {
 
     target.y = target.y > PI_HALF ? PI_HALF : target.y;
     target.y = target.y < -PI_HALF ? -PI_HALF : target.y;
+
+    if (event.touches.length > 1) {
+      let event2 = event.touches[1];
+      let currDist = getDist(
+        event1.clientX,
+        event1.clientY,
+        event2.clientX,
+        event2.clientY
+      );
+      if (isZooming) {
+        zoomMobile((currDist - lastDist) * 3);
+      } else {
+        isZooming = true;
+      }
+      lastDist = currDist;
+    } else {
+      isZooming = false;
+    }
   }
 
   function onMouseUp(event) {
@@ -397,6 +431,7 @@ function Globe(container, opts) {
       mouseDown = false;
       mouseDeltaTime += Date.now() - mouseDownTime;
     }
+    isZooming = false;
 
     container.removeEventListener("touchmove", onTouchMove, false);
     container.removeEventListener("touchend", onTouchEnd, false);
@@ -419,6 +454,7 @@ function Globe(container, opts) {
       mouseDown = false;
       mouseDeltaTime += Date.now() - mouseDownTime;
     }
+    isZooming = false;
 
     container.removeEventListener("touchmove", onTouchMove, false);
     container.removeEventListener("touchend", onTouchEnd, false);
@@ -453,6 +489,7 @@ function Globe(container, opts) {
   }
 
   function zoom(delta) {
+    console.log(delta);
     distanceTarget -= delta;
     distanceTarget = distanceTarget > distMax ? distMax : distanceTarget;
     distanceTarget = distanceTarget < distMin ? distMin : distanceTarget;
@@ -463,21 +500,22 @@ function Globe(container, opts) {
     render();
   }
 
-  let timer = 0;
+  let lastBase = 0;
   let deltaTime = 0;
 
   function render() {
     zoom(curZoomSpeed);
 
-    var newTimer = mouseDown
-      ? (mouseDownTime - mouseDeltaTime) * 0.0001
-      : (Date.now() - mouseDeltaTime) * 0.0001;
+    var base = mouseDown
+      ? mouseDownTime - mouseDeltaTime
+      : Date.now() - mouseDeltaTime;
 
-    if (newTimer - timer > 0.01) {
-      deltaTime = newTimer - timer;
+    if (base - lastBase > 100) {
+      deltaTime += base - lastBase;
     }
 
-    timer = newTimer + deltaTime;
+    lastBase = base;
+    var timer = (base - deltaTime) * 0.0001;
 
     rotation.x += (target.x - rotation.x + timer) * 0.1;
     rotation.y += (target.y - rotation.y) * 0.1;

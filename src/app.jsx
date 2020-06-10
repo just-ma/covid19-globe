@@ -32,15 +32,21 @@ export default function App() {
     }
   }, [fullData, containerEl]);
 
-  return (!data ? <Loading /> :
+  return (
     <div className="main">
       <div ref={containerEl} className="main__container" />
-      <div className="main__bottom">
-        <ControlBar data={data} globe={globe} />
-      </div>
-      <div className="main__corner">
-        <Info/>
-      </div>
+      {globe ? (
+        <div>
+          <div className="main__bottom">
+            <ControlBar data={data} globe={globe} />
+          </div>
+          <div className="main__corner">
+            <Info />
+          </div>
+        </div>
+      ) : (
+        <Loading />
+      )}
     </div>
   );
 }
