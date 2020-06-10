@@ -17,7 +17,6 @@ export const createGlobe = (data, container, startTime) => {
   }
 
   globe.createPoints();
-  updateGlobe(startTime);
   globe.animate();
 
   return globe;
@@ -26,7 +25,7 @@ export const createGlobe = (data, container, startTime) => {
 export const updateGlobe = (globe, time, ease) => {
   if (ease) {
     new TWEEN.Tween(globe)
-      .to({ time: time }, 500)
+      .to({ time: time }, 400)
       .easing(TWEEN.Easing.Cubic.EaseOut)
       .start();
   } else {

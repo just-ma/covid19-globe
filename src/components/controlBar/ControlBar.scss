@@ -1,8 +1,8 @@
 @import "../../styles.scss";
 
 .control {
-  height: 40px;
-  padding: 20px;
+  height: 50px;
+  padding: 10px 10px 20px 10px;
   background-color: black;
   opacity: 0.8;
   border-radius: 7px;
@@ -28,6 +28,7 @@
 @media screen and (max-width: $max-width) {
   .control {
     height: 80px;
+    padding: 20px 10px;
 
     &__button {
       height: 0px;

@@ -90,7 +90,7 @@ function Globe(container, opts) {
     target = { x: (Math.PI * 3) / 2, y: Math.PI / 6.0 },
     targetOnDown = { x: 0, y: 0 };
 
-  var distance = 1100,
+  var distance = 5000,
     distanceTarget = 1100;
   var distMax = 1500;
   var distMin = 350;

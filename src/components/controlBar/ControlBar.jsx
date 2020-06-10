@@ -3,11 +3,13 @@ import Slidebar from "../slidebar/Slidebar";
 import Settings from "../settings/Settings";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import PlayArrowIcon from "@material-ui/icons/PlayArrow";
-import PauseIcon from '@material-ui/icons/Pause';
+import PauseIcon from "@material-ui/icons/Pause";
 import Tooltip from "@material-ui/core/Tooltip";
 import IconButton from "@material-ui/core/IconButton";
 import { updateGlobe } from "../../utils";
 import "./ControlBar.scss";
+
+const ANIMATION_SPEED = 150;
 
 export default function ControlBar({ data, globe }) {
   const [scale, setScale] = useState("log");
@@ -19,34 +21,39 @@ export default function ControlBar({ data, globe }) {
   useEffect(() => {
     let id;
     if (isAnimating) {
-      id = setInterval(animateTimeline, 150)
+      id = setInterval(animateTimeline, ANIMATION_SPEED);
     }
-    return () => clearInterval(id)
+    return () => clearInterval(id);
   }, [isAnimating]);
+
+  useEffect(() => {
+    if (time === Number.MAX_VALUE) return;
+    let translatedTime = translateTime(time, scale);
+    let ease = (globe.time < 0.5) ^ (translatedTime > 0.5);
+    updateGlobe(globe, translatedTime, ease);
+  }, [time, scale]);
 
   const translateTime = (t, s) => {
     let t2 = t / (data.length - 1);
-    return s === "linear" ? Math.min(t2 / 2, 0.49) : Math.max(t2 / 2 + 0.5, 0.51);
+    return s === "linear"
+      ? Math.min(t2 / 2, 0.49)
+      : Math.max(t2 / 2 + 0.5, 0.51);
   };
 
   const updateTime = (t) => {
-    let translatedTime = translateTime(t, scale);
-    updateGlobe(globe, translatedTime, true);
     setTime(t);
   };
 
   const toggleLinLog = (event, value) => {
     if (value !== null) {
-      setIsAnimating(false);
       setScale(value);
-      let translatedTime = translateTime(time, value);
-      updateGlobe(globe, translatedTime, false);
     }
   };
 
   const onTooltipClick = () => {
     if (!settingsOpen) {
       setSettingsOpen(true);
+      setIsAnimating(false);
     }
   };
 
@@ -58,17 +65,15 @@ export default function ControlBar({ data, globe }) {
   };
 
   const animateTimeline = () => {
-    setTime(p => {
+    setTime((p) => {
       if (p === data.length - 1) {
-        setIsAnimating(false)
+        setIsAnimating(false);
         return p;
       } else {
-        let translatedTime = translateTime(p, scale);
-        updateGlobe(globe, translatedTime, true);
-        return p + 1
+        return p + 1;
       }
     });
-  }
+  };
 
   const togglePlayPause = () => {
     if (time >= data.length - 1) {
@@ -76,16 +81,19 @@ export default function ControlBar({ data, globe }) {
       setIsAnimating(true);
     } else if (!isAnimating) {
       setIsAnimating(true);
-    }
-    else {
+    } else {
       setIsAnimating(false);
     }
-  }
+  };
 
   return (
     <div className="control">
       <IconButton className="control__button" onClick={togglePlayPause}>
-        {!isAnimating ? <PlayArrowIcon className="control__icon" /> : <PauseIcon className="control__icon" />}
+        {!isAnimating ? (
+          <PlayArrowIcon className="control__icon" />
+        ) : (
+          <PauseIcon className="control__icon" />
+        )}
       </IconButton>
       <Slidebar updateTime={updateTime} data={data} time={time} />
       <Tooltip
