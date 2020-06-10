@@ -374,13 +374,6 @@ function Globe(container, opts) {
     return Math.sqrt(xDist + yDist);
   }
 
-  function zoomMobile(delta) {
-    console.log(delta);
-    distanceTarget -= delta;
-    distanceTarget = distanceTarget > distMax ? distMax : distanceTarget;
-    distanceTarget = distanceTarget < distMin ? distMin : distanceTarget;
-  }
-
   function onTouchMove(event) {
     let event1 = event.touches[0];
 
@@ -404,7 +397,7 @@ function Globe(container, opts) {
         event2.clientY
       );
       if (isZooming) {
-        zoomMobile((currDist - lastDist) * 3);
+        zoom((currDist - lastDist) * 3);
       } else {
         isZooming = true;
       }
@@ -489,7 +482,6 @@ function Globe(container, opts) {
   }
 
   function zoom(delta) {
-    console.log(delta);
     distanceTarget -= delta;
     distanceTarget = distanceTarget > distMax ? distMax : distanceTarget;
     distanceTarget = distanceTarget < distMin ? distMin : distanceTarget;
