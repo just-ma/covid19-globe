@@ -27,7 +27,13 @@ export default function ControlBar({ data, globe }) {
   }, [isAnimating]);
 
   useEffect(() => {
-    if (time === Number.MAX_VALUE) return;
+    if (data) {
+      setTime(data.length - 1);
+    }
+  }, [data]);
+
+  useEffect(() => {
+    if (!globe) return;
     let translatedTime = translateTime(time, scale);
     let ease = (globe.time < 0.5) ^ (translatedTime > 0.5);
     updateGlobe(globe, translatedTime, ease);

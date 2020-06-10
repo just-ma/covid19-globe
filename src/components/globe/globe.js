@@ -171,8 +171,6 @@ function Globe(container, opts) {
     container.addEventListener("mousewheel", onMouseWheel, false);
     document.addEventListener("keydown", onDocumentKeyDown, false);
     window.addEventListener("resize", onWindowResize, false);
-    window.addEventListener("focus", onWindowFocus, false);
-    window.addEventListener("blur", onWindowBlur, false);
     container.addEventListener(
       "mouseover",
       function () {
@@ -194,20 +192,6 @@ function Globe(container, opts) {
       },
       false
     );
-}
-
-  function onWindowFocus() {
-    if (isRotating) {
-      mouseDown = false;
-      mouseDeltaTime += Date.now() - mouseDownTime;
-    }
-  }
-
-  function onWindowBlur() {
-    if (isRotating) {
-      mouseDown = true;
-      mouseDownTime = Date.now();
-    }
   }
 
   function addData(data, opts) {
@@ -479,12 +463,21 @@ function Globe(container, opts) {
     render();
   }
 
+  let timer = 0;
+  let deltaTime = 0;
+
   function render() {
     zoom(curZoomSpeed);
 
-    var timer = mouseDown
+    var newTimer = mouseDown
       ? (mouseDownTime - mouseDeltaTime) * 0.0001
       : (Date.now() - mouseDeltaTime) * 0.0001;
+
+    if (newTimer - timer > 0.01) {
+      deltaTime = newTimer - timer;
+    }
+
+    timer = newTimer + deltaTime;
 
     rotation.x += (target.x - rotation.x + timer) * 0.1;
     rotation.y += (target.y - rotation.y) * 0.1;

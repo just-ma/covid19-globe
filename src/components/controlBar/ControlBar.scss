@@ -10,6 +10,7 @@
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
+  z-index: 99;
 
   &__icon {
     color: white;
@@ -27,11 +28,13 @@
 
 @media screen and (max-width: $max-width) {
   .control {
-    height: 80px;
-    padding: 20px 10px;
+    height: 100px;
+    padding: 10px 10px 10px 20px;
+    align-items: flex-start;
 
     &__button {
-      height: 0px;
+      height: 40px;
+      margin-top: 0px !important;
     }
   }
 }

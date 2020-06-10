@@ -83,14 +83,23 @@ export const formatDate = (numDate) => {
   return `${month.toUpperCase()} ${day}, ${year}`;
 };
 
-export const extractMonth = (numDate) => {
-  const date = new Date(numDate);
-  const dateTimeFormat = new Intl.DateTimeFormat("en", {
-    month: "short",
-  });
-  const [{ value: month }] = dateTimeFormat.formatToParts(date);
-
-  return month.toUpperCase();
+const extractMonth = (month) => {
+  let months = [
+    "",
+    "JAN",
+    "FEB",
+    "MAR",
+    "APR",
+    "MAY",
+    "JUN",
+    "JUL",
+    "AUG",
+    "SEP",
+    "OCT",
+    "NOV",
+    "DEC",
+  ];
+  return months[parseInt(month)];
 };
 
 export const getMarks = (data) => {
