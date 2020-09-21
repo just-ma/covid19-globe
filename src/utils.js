@@ -83,10 +83,10 @@ export const formatDate = (numDate) => {
   return `${month.toUpperCase()} ${day}, ${year}`;
 };
 
-const extractMonth = (month) => {
+const getLabel = (month, year) => {
   let months = [
     "",
-    "JAN",
+    `20${year.slice(0, 2)}`,
     "FEB",
     "MAR",
     "APR",
@@ -105,15 +105,39 @@ const extractMonth = (month) => {
 export const getMarks = (data) => {
   let lastMonth = "1";
   let marks = [];
+  let stepSize = 1;
+  let currStep = 1;
+  const numMonths = data.length / 30.5;
+
+  if (numMonths > 24) {
+    stepSize = 12;
+  } else if (numMonths > 12) {
+    stepSize = 4;
+  } else if (numMonths > 9) {
+    stepSize = 3;
+  } else if (numMonths > 6) {
+    stepSize = 2;
+  }
 
   for (let i = 0; i < data.length; ++i) {
-    let currMonth = data[i][0].split("/")[0];
+    const currDate = data[i][0].split("/");
+    let currMonth = currDate[0];
     if (currMonth !== lastMonth) {
       lastMonth = currMonth;
-      marks.push({
-        value: i,
-        label: extractMonth(currMonth),
-      });
+      console.log(stepSize, currStep, numMonths);
+      if (currStep === stepSize) {
+        marks.push({
+          value: i,
+          label: getLabel(currMonth, currDate[2]),
+        });
+        currStep = 1;
+      } else {
+        marks.push({
+          value: i,
+          label: "",
+        });
+        currStep++;
+      }
     }
   }
 
